@@ -2,9 +2,9 @@
 
 ## How do I install these formulae?
 
-`brew install nuonco/tap/<formula>`
+`brew install nuonco/tap/nuon`
 
-Or `brew tap nuonco/tap` and then `brew install <formula>`.
+Or `brew tap nuonco/tap` and then `brew install nuon`.
 
 ## Documentation
 
