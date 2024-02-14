@@ -1,5 +1,5 @@
 class Nuon < Formula
-  desc "Nuon"
+  desc "CLI client for Nuon"
   homepage "https://www.nuon.co/"
   version "0.19.34"
 
@@ -33,6 +33,6 @@ class Nuon < Formula
   end
 
   test do
-    system "#{bin}/nuon version"
+    system "#{bin}/nuon", "version"
   end
 end
