@@ -29,7 +29,21 @@ class Nuon < Formula
   end
 
   def install
-    bin.install "nuon"
+    # Clunky way to get filename.
+    if OS.mac? && Hardware::CPU.intel?
+      filename = "nuon_darwin_amd64"
+    elsif OS.mac? && Hardware::CPU.arm?
+      filename = "nuon_darwin_arm64"
+    elsif OS.linux? && Hardware::CPU.intel?
+      filename = "nuon_linux_amd64"
+    elsif OS.linux? && Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
+      filename = "nuon_linux_arm"
+    elsif OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
+      filename = "nuon_linux_arm64"
+    end
+
+    # Need to rename the file because we're downloading a binary.
+    bin.install filename => "nuon"
   end
 
   test do
