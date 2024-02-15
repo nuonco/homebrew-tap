@@ -1,0 +1,43 @@
+---
+name: Generate
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: The version of the CLI the tap should install.
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      version:
+        description: The version of the CLI the tap should install.
+        required: true
+        type: string
+env:
+  GH_TOKEN: ${{ secrets.NUON_BOT_GITHUB_TOKEN }}
+jobs:
+  generate:
+    name: Generate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Enable commit signing
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.NUON_BOT_PRIVATE_KEY }}
+          passphrase: ${{ secrets.NUON_BOT_PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+      - name: Generate
+        run: |
+          ./scripts/generate.sh ${{ inputs.version }}
+      - name: Commit changes
+        run: |
+          git checkout -b nuonbot/generate-from-api-$(cat version.txt)
+          git add .
+          git commit -m "ci: generate formula for CLI version ${{ inputs.version }}"
+          git push -u origin nuonbot/generate-from-api-$(cat version.txt)
+      - name: Open PR
+        run: |
+          gh pr create --title "ci: generate formula for CLI version ${{ inputs.version }}" --body "ci: generate formula for CLI version ${{ inputs.version }}" --label "auto-merge"
