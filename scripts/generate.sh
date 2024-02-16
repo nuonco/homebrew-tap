@@ -1,6 +1,14 @@
 #!/bin/bash
 
 version=$1
+artifact_url="https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/$version"
+
+checksum_file=$(curl -s "$artifact_url/checksum.txt")
+nuon_darwin_amd64_checksum=$(echo "$checksum_file" | grep "/nuon_darwin_amd64$" | cut -b -64)
+nuon_darwin_arm64_checksum=$(echo "$checksum_file" | grep "/nuon_darwin_arm64$" | cut -b -64)
+nuon_linux_amd64_checksum=$(echo "$checksum_file" | grep "/nuon_linux_amd64$" | cut -b -64)
+nuon_linux_arm_checksum=$(echo "$checksum_file" | grep "/nuon_linux_arm$" | cut -b -64)
+nuon_linux_arm64_checksum=$(echo "$checksum_file" | grep "/nuon_linux_arm64$" | cut -b -64)
 
 cat >./Formula/nuon.rb <<EOL
 class Nuon < Formula
@@ -9,28 +17,28 @@ class Nuon < Formula
   version "${version}"
 
   if OS.mac? && Hardware::CPU.intel?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/${version}/nuon_darwin_amd64"
-    sha256 "402cf778c048cf897745e3535a5af91f5103b2d9df728c2ebd6721a0276cf40e"
+    url "${artifact_url}/nuon_darwin_amd64"
+    sha256 "${nuon_darwin_amd64_checksum}"
   end
 
   if OS.mac? && Hardware::CPU.arm?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/${version}/nuon_darwin_arm64"
-    sha256 "83976e513ac1219a2b4f75a9d72819ea1ec267fbe32ca18db4ea7ced04cd74c6"
+    url "${artifact_url}/nuon_darwin_arm64"
+    sha256 "${nuon_darwin_arm64_checksum}"
   end
 
   if OS.linux? && Hardware::CPU.intel?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/${version}/nuon_linux_amd64"
-    sha256 "0a434be6a71a2ee9c399a274c4e1b8ef93060626f3d6fb44f0ce9562287eab29"
+    url "${artifact_url}/nuon_linux_amd64"
+    sha256 "${nuon_linux_amd64_checksum}"
   end
 
   if OS.linux? && Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/${version}/nuon_linux_arm"
-    sha256 "4532214aff14a091e4e9992572f00da38e7dbf03b9ec89c4e9882fadf3b8e843"
+    url "${artifact_url}/nuon_linux_arm"
+    sha256 "${nuon_linux_arm_checksum}"
   end
 
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/${version}/nuon_linux_arm64"
-    sha256 "48a84cb09ffe582ae3b6d29b52ce0888fdc8316be161e002c36a45cd992b3b5e"
+    url "${artifact_url}/nuon_linux_arm64"
+    sha256 "${nuon_linux_arm64_checksum}"
   end
 
   def install
