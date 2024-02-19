@@ -6,3 +6,4 @@ name: pull request checks
 jobs:
   check-pr:
     uses: nuonco/.github/.github/workflows/pull_request.yml@main
+    secrets: inherit
