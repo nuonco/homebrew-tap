@@ -5,27 +5,27 @@ class Nuon < Formula
 
   if OS.mac? && Hardware::CPU.intel?
     url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.52/nuon_darwin_amd64"
-    sha256 "faf6b6e94eb40c13dfb6e09823564fbcf27fcff18a540e820ec69ad4a0a4263e"
+    sha256 "9609e7af7b711ba30b8352d1dcbbc9a17dff0bc38fffffef3919c31e65da1c28"
   end
 
   if OS.mac? && Hardware::CPU.arm?
     url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.52/nuon_darwin_arm64"
-    sha256 "53329db019119b89ae279cb74fcad5ebc5b5ef39197279a3557eaeaebb413606"
+    sha256 "136b1688e57da3d52cb65efaf6678afe597800d2221fc73460a6ace9f407fe1f"
   end
 
   if OS.linux? && Hardware::CPU.intel?
     url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.52/nuon_linux_amd64"
-    sha256 "064ac01568283aefb8290b289c69a6de7f910f9db6727480bc2a508a9487011f"
+    sha256 "d43c9f669c8dcbe9e083ecb5d622aa75f6e2ecbb736a83b333f21c690758b230"
   end
 
   if OS.linux? && Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
     url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.52/nuon_linux_arm"
-    sha256 "bcfab9c0fc2ac41b95cec5dc91538b4ba05d079b78979078463b183e37a67b23"
+    sha256 "bdf61c9fb7c0b789c2c8f408a8c0fcc12feebf003ae5cc267f212e226e2b6c5c"
   end
 
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
     url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.52/nuon_linux_arm64"
-    sha256 "44e796f820b2748fdf282c4f5c81594fc5eaefc7bb8e0aa3e93f311318eff8a2"
+    sha256 "3a2d6d95b046481f131c77af9a12d832de2391d310a7ce73ac4fa215680dd626"
   end
 
   def install
