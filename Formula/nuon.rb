@@ -1,31 +1,31 @@
 class Nuon < Formula
   desc "CLI client for Nuon"
   homepage "https://www.nuon.co/"
-  version "0.19.61"
+  version "0.19.62"
 
   if OS.mac? && Hardware::CPU.intel?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.61/nuon_darwin_amd64"
-    sha256 "f772179f8c4f2e6a44282ab8660fc190c96b7c8fa18027cdcebc1485ee1ece0c"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.62/nuon_darwin_amd64"
+    sha256 "696a064b328780ddc1fd61d9c5afb9d6a011781b8ce24eb1c64a090538d1ce61"
   end
 
   if OS.mac? && Hardware::CPU.arm?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.61/nuon_darwin_arm64"
-    sha256 "142c209eb86e2c758a04f84f76315e9656db81b21294a02e0398bfd190d77e82"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.62/nuon_darwin_arm64"
+    sha256 "e05852b9c237d13af11ef9bb6458727af1d48c73bf1e5065fc65a3f770083586"
   end
 
   if OS.linux? && Hardware::CPU.intel?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.61/nuon_linux_amd64"
-    sha256 "454825043235a555e9906c1314aeb23f5ddfc72138dc75210ee0a0a19ba91efd"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.62/nuon_linux_amd64"
+    sha256 "7505a3e264f363b05eb24ffc459388c0a8ba737bcee0fcddf7e310ef924b126e"
   end
 
   if OS.linux? && Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.61/nuon_linux_arm"
-    sha256 "b41797ae83f915f86a545e95bb3d9fccb9d5e4019502dc8a9f443c9ca6b7f537"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.62/nuon_linux_arm"
+    sha256 "9706ae8a43f83578b2ae1f4d0a65b81d14f27f2d080090120a597216c732b988"
   end
 
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.61/nuon_linux_arm64"
-    sha256 "db99d6f839ff829b1d79be448bfa11dfaa6a125c581359b744cf4724565e248f"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.62/nuon_linux_arm64"
+    sha256 "6ef7d81b3b32d26625801b253b0b0bbeec601a55f6d619a2c839f5c7b5528df7"
   end
 
   def install
