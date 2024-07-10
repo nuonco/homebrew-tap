@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2086,SC2046,SC2250,SC2312
 
 version=$1
 artifact_url="https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/$version"

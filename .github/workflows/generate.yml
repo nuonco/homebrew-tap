@@ -22,16 +22,16 @@ jobs:
           git_commit_gpgsign: true
       - name: Save version
         run: |
-          echo $VERSION > version.txt
+          echo "$VERSION" > version.txt
       - name: Generate
         run: |
-          ./scripts/generate.sh $VERSION
+          ./scripts/generate.sh "$VERSION"
       - name: Commit changes
         run: |
-          git checkout -b nuonbot/generate-$VERSION
+          git checkout -b "nuonbot/generate-${VERSION}"
           git add .
-          git commit -m "ci: generate formula for CLI version $VERSION"
-          git push -u origin nuonbot/generate-$VERSION
+          git commit -m "ci: generate formula for CLI version ${VERSION}"
+          git push -u origin "nuonbot/generate-${VERSION}"
       - name: Open PR
         run: |
-          gh pr create --title "ci: generate formula for CLI version $VERSION" --body "ci: generate formula for CLI version $VERSION" --label "auto-merge"
+          gh pr create --title "ci: generate formula for CLI version ${VERSION}" --body "ci: generate formula for CLI version ${VERSION}" --label "auto-merge"

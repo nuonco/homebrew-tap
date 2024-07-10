@@ -10,11 +10,11 @@ defaults:
 env:
   GH_TOKEN: ${{ github.token }}
 jobs:
-    release:
-      name: Release
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v3
-        - name: Release
-          run: gh release create $(cat version.txt) --generate-notes --target main
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Release
+        run: gh release create "$(cat version.txt)" --generate-notes --target main
