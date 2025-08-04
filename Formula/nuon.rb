@@ -1,31 +1,31 @@
 class Nuon < Formula
   desc "CLI client for Nuon"
   homepage "https://www.nuon.co/"
-  version "0.19.602"
+  version "0.19.613"
 
   if OS.mac? && Hardware::CPU.intel?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.602/nuon_darwin_amd64"
-    sha256 "3645b4a3d108690a9dfc44c48d2643668342d899e8675efcf5aa95376fe39996"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.613/nuon_darwin_amd64"
+    sha256 ""
   end
 
   if OS.mac? && Hardware::CPU.arm?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.602/nuon_darwin_arm64"
-    sha256 "0c90b2c888ddb834a741c14ee19e18ff1b9bcd4116dec8ac2d51aa4352d7860c"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.613/nuon_darwin_arm64"
+    sha256 ""
   end
 
   if OS.linux? && Hardware::CPU.intel?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.602/nuon_linux_amd64"
-    sha256 "625313eca1911896404b589492e116f947d63d1a15e1483fcc5c591164db7396"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.613/nuon_linux_amd64"
+    sha256 ""
   end
 
   if OS.linux? && Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.602/nuon_linux_arm"
-    sha256 "cae7a9f08670de7bba5c2113d64d4418cc1a1af09e8f907702de8a62dd89cee0"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.613/nuon_linux_arm"
+    sha256 ""
   end
 
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.602/nuon_linux_arm64"
-    sha256 "e4f0b09d17d2af41b4d2c06f6325dfdbea16b628d192346644d591c5155a432e"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.613/nuon_linux_arm64"
+    sha256 ""
   end
 
   def install
