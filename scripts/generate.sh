@@ -4,7 +4,7 @@
 version=$1
 artifact_url="https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/$version"
 
-checksum_file=$(curl -s "$artifact_url/checksum.txt")
+checksum_file=$(curl -s "$artifact_url/checksums.txt")
 nuon_darwin_amd64_checksum=$(echo "$checksum_file" | grep "nuon_darwin_amd64$" | cut -b -64)
 nuon_darwin_arm64_checksum=$(echo "$checksum_file" | grep "nuon_darwin_arm64$" | cut -b -64)
 nuon_linux_amd64_checksum=$(echo "$checksum_file" | grep "nuon_linux_amd64$" | cut -b -64)
