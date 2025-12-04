@@ -3,6 +3,7 @@ class Nuon < Formula
   homepage "https://www.nuon.co/"
   version "0.19.709"
 
+  # CLI binary
   if OS.mac? && Hardware::CPU.intel?
     url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.709/nuon_darwin_amd64"
     sha256 "880924a9167f6a12ccb6d4deeb564d5f425fb626f5b0e6318eb7d254ddd18a53"
@@ -29,21 +30,26 @@ class Nuon < Formula
   end
 
   def install
-    # Clunky way to get filename.
+    # Determine CLI binary filename based on platform
     if OS.mac? && Hardware::CPU.intel?
-      filename = "nuon_darwin_amd64"
+      cli_filename = "nuon_darwin_amd64"
+      lsp_filename = "nuon-lsp_darwin_amd64"
     elsif OS.mac? && Hardware::CPU.arm?
-      filename = "nuon_darwin_arm64"
+      cli_filename = "nuon_darwin_arm64"
+      lsp_filename = "nuon-lsp_darwin_arm64"
     elsif OS.linux? && Hardware::CPU.intel?
-      filename = "nuon_linux_amd64"
+      cli_filename = "nuon_linux_amd64"
+      lsp_filename = "nuon-lsp_linux_amd64"
     elsif OS.linux? && Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
-      filename = "nuon_linux_arm"
+      cli_filename = "nuon_linux_arm"
+      lsp_filename = "nuon-lsp_linux_arm"
     elsif OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      filename = "nuon_linux_arm64"
+      cli_filename = "nuon_linux_arm64"
+      lsp_filename = "nuon-lsp_linux_arm64"
     end
 
-    # Need to rename the file because we're downloading a binary.
-    bin.install filename => "nuon"
+    # Install CLI binary
+    bin.install cli_filename => "nuon"
   end
 
   test do
