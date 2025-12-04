@@ -1,32 +1,32 @@
 class Nuon < Formula
   desc "CLI client for Nuon"
   homepage "https://www.nuon.co/"
-  version "0.19.709"
+  version "0.19.712"
 
   # CLI binary
   if OS.mac? && Hardware::CPU.intel?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.709/nuon_darwin_amd64"
-    sha256 "880924a9167f6a12ccb6d4deeb564d5f425fb626f5b0e6318eb7d254ddd18a53"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.712/nuon_darwin_amd64"
+    sha256 "8a968d5a171dcbaac4ded0aebea9ce293de165fd160dbaf383b9e0f8574b1e6d"
   end
 
   if OS.mac? && Hardware::CPU.arm?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.709/nuon_darwin_arm64"
-    sha256 "9652d427c41a6158fee3e9b0ac7fb555897deb05546fc2df41bf9ac15e1a72f6"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.712/nuon_darwin_arm64"
+    sha256 "9fddd50b31b3489dac7c6e1e1ca10f516916ea613ec4b3ca662f9a5c2ae05bbb"
   end
 
   if OS.linux? && Hardware::CPU.intel?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.709/nuon_linux_amd64"
-    sha256 "5ad8a26ed9c6dc12b865f81ee4681fbc7a15079f614d062cb47d0f06a5c4ce57"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.712/nuon_linux_amd64"
+    sha256 "263f88925478a34b72320d34414355340f406069cf6251d8a9754cdbfeef363f"
   end
 
   if OS.linux? && Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.709/nuon_linux_arm"
-    sha256 "ce46370013366a92da58447c0b08ad5d9ff915523dcfba4db52217d518e42e44"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.712/nuon_linux_arm"
+    sha256 "f0ef4f404ecea882eaa33cd90dc3b1ad053d5edf050564832608d3d45e255798"
   end
 
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.709/nuon_linux_arm64"
-    sha256 "d9780366da4e6eee38f12616121b4e85cfd43abfe9ca2664435cd8cf6016a2a4"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.712/nuon_linux_arm64"
+    sha256 "3a3e089c3b83f9f9196464c26f6bb3729bb2539b5b284e72633095de05d84951"
   end
 
   def install
