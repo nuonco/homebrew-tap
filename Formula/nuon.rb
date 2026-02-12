@@ -1,67 +1,67 @@
 class Nuon < Formula
   desc "CLI client for Nuon with Language Server Protocol support"
   homepage "https://www.nuon.co/"
-  version "0.19.771"
+  version "0.19.777"
 
   # CLI binary
   if OS.mac? && Hardware::CPU.intel?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.771/nuon_darwin_amd64"
-    sha256 "1b0dd30537bcdd8a5c7866783125c9ffefa260ee141cb9c47f09dbb91104fd18"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.777/nuon_darwin_amd64"
+    sha256 ""
   end
 
   if OS.mac? && Hardware::CPU.arm?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.771/nuon_darwin_arm64"
-    sha256 "0da71dd84fd4d55eae12778ae40e166fbfedcb15fb18e6cb9cba3829ef106e7e"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.777/nuon_darwin_arm64"
+    sha256 ""
   end
 
   if OS.linux? && Hardware::CPU.intel?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.771/nuon_linux_amd64"
-    sha256 "0e24a3fcc45a692f35ede733fe964ae3f20da182fabad5e92f8e73f3555c80f2"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.777/nuon_linux_amd64"
+    sha256 ""
   end
 
   if OS.linux? && Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.771/nuon_linux_arm"
-    sha256 "de251a22195a5650accfa35cc4380bf4a8aa61793cfd45802332c5be849a8d6b"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.777/nuon_linux_arm"
+    sha256 ""
   end
 
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.771/nuon_linux_arm64"
-    sha256 "fa9c31f2e2f36fa6cddc170699e0677ad556af44200ee31ea0513d7e0c347cdf"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.777/nuon_linux_arm64"
+    sha256 ""
   end
 
   # LSP binary (as a resource)
   if OS.mac? && Hardware::CPU.intel?
     resource "lsp" do
-      url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/lsp/0.19.771/nuon-lsp_darwin_amd64"
-      sha256 "89574565ed1c1a33087e0ba68fbff7002cf20e27706e0b073c98992547c52696"
+      url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/lsp/0.19.777/nuon-lsp_darwin_amd64"
+      sha256 "1a320dfe71795131bbd8776c05708ee3f87c30abd12a3638f3dda5d18eaee097"
     end
   end
 
   if OS.mac? && Hardware::CPU.arm?
     resource "lsp" do
-      url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/lsp/0.19.771/nuon-lsp_darwin_arm64"
-      sha256 "43ce85ae61c182766d31a905f713e8bb26370e8f7ddf7c8ca873b30640ed95ef"
+      url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/lsp/0.19.777/nuon-lsp_darwin_arm64"
+      sha256 "4b39a058e43d80b76374a59113efeddd814378599fa38ae135985c816c67d67b"
     end
   end
 
   if OS.linux? && Hardware::CPU.intel?
     resource "lsp" do
-      url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/lsp/0.19.771/nuon-lsp_linux_amd64"
-      sha256 "c2c6c83e90d3af742936752fa16a84a39045d3549c90198a47935d4dd809ca61"
+      url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/lsp/0.19.777/nuon-lsp_linux_amd64"
+      sha256 "b1800eb36b1834af53b59fdc88121c85e00249e4b34dfc2f99cbe46ea429086f"
     end
   end
 
   if OS.linux? && Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
     resource "lsp" do
-      url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/lsp/0.19.771/nuon-lsp_linux_arm"
-      sha256 "18d0ac064ca60645b72a1c80ee663c179fc4765fca9e8b672440b3459c86e739"
+      url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/lsp/0.19.777/nuon-lsp_linux_arm"
+      sha256 "82f043de44e355a32debb36da33037c13f5d6e2e1c332620494b73a404c9eaf4"
     end
   end
 
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
     resource "lsp" do
-      url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/lsp/0.19.771/nuon-lsp_linux_arm64"
-      sha256 "fc8a7666a7ff287fcb33f73bad63e693ca91aa5bd9cacd8ba2b7fe9cf944881d"
+      url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/lsp/0.19.777/nuon-lsp_linux_arm64"
+      sha256 "d4669e05a2ed67f4fb5293f6d339f5e1c5d65ace1911d16b48648c7ae0f148f0"
     end
   end
 
