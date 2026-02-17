@@ -1,66 +1,66 @@
 class Nuon < Formula
   desc "CLI client for Nuon with Language Server Protocol support"
   homepage "https://www.nuon.co/"
-  version "0.19.789"
+  version "0.19.790"
 
   # CLI binary
   if OS.mac? && Hardware::CPU.intel?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.789/nuon_darwin_amd64"
-    sha256 "90af7ae93805fc5fa01b912c0f6e0c5aedfda0a486d3d181b7d44ba175e01665"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.790/nuon_darwin_amd64"
+    sha256 "39cd8464bfafb4f11254d742167afa587696a61c8caa1fa6c8792e1613ad0d4f"
   end
 
   if OS.mac? && Hardware::CPU.arm?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.789/nuon_darwin_arm64"
-    sha256 "18a2ac4dd4ee5f1d76c6be8ebe2fef63a5c062492e66462d3d5a5030dde6dc9b"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.790/nuon_darwin_arm64"
+    sha256 "9b5193422bd466a915193baf8983ae74de36f7296525d2b40f5b16ce3bc85c52"
   end
 
   if OS.linux? && Hardware::CPU.intel?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.789/nuon_linux_amd64"
-    sha256 "ffd068e34b6a3718b820cf1b66ff39b96d24bfd70128b89ed6aa5f9066ffa9b3"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.790/nuon_linux_amd64"
+    sha256 "1bb59f3c9d26e19fd6f43d3aed5d42669f0506ccc7554b2d29c8fae5c0de6bfe"
   end
 
   if OS.linux? && Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.789/nuon_linux_arm"
-    sha256 "89daa5bc7eb9134714458b08332602b50e5436e2c51e61b431ee9511cdf29b26"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.790/nuon_linux_arm"
+    sha256 "58c6d738fe468810204a257dffe4a02212c6ce310d4b45f6d88449496ce052ce"
   end
 
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.789/nuon_linux_arm64"
-    sha256 "ef02807bfd5e86ad253aedd5995513ee6ef20d62c8d8aa3e786942e8f74fef9d"
+    url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.790/nuon_linux_arm64"
+    sha256 "2d6a5936a9f3bec0faf231ca5fd2569b3f3b22a32c040050aa5adbae05386308"
   end
 
   # LSP binary (as a resource)
   if OS.mac? && Hardware::CPU.intel?
     resource "lsp" do
-      url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/lsp/0.19.789/nuon-lsp_darwin_amd64"
+      url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/lsp/0.19.790/nuon-lsp_darwin_amd64"
       sha256 "1b08e2842603bfb576a9d382e2f4c1dc91f270c741d23d7c3c7668df3577509d"
     end
   end
 
   if OS.mac? && Hardware::CPU.arm?
     resource "lsp" do
-      url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/lsp/0.19.789/nuon-lsp_darwin_arm64"
+      url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/lsp/0.19.790/nuon-lsp_darwin_arm64"
       sha256 "e76c689e54cb2382a4f78d82f1d6edac1b08156d95d9cd759551de49ee1dcd33"
     end
   end
 
   if OS.linux? && Hardware::CPU.intel?
     resource "lsp" do
-      url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/lsp/0.19.789/nuon-lsp_linux_amd64"
+      url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/lsp/0.19.790/nuon-lsp_linux_amd64"
       sha256 "883bf5b3bde755f6b7bcbac9e9bed2de1ca65302e03f97c87dee9cd55621d7ff"
     end
   end
 
   if OS.linux? && Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
     resource "lsp" do
-      url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/lsp/0.19.789/nuon-lsp_linux_arm"
+      url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/lsp/0.19.790/nuon-lsp_linux_arm"
       sha256 "0c5fe5a5eda36e472e892c78c17e0453fd28d92510a051edd7938ecaaf7ecd37"
     end
   end
 
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
     resource "lsp" do
-      url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/lsp/0.19.789/nuon-lsp_linux_arm64"
+      url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/lsp/0.19.790/nuon-lsp_linux_arm64"
       sha256 "3775410312001adca66deb6e05d944a86fb0e0c7a3c4ec62b14d5681b014ab78"
     end
   end
