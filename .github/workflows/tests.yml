@@ -10,6 +10,12 @@ jobs:
       matrix:
         os: [ubuntu-22.04, ubuntu-24.04, macos-14, macos-15, macos-26]
     runs-on: ${{ matrix.os }}
+    env:
+      # The GitHub Actions runners enable the Homebrew Linux sandbox but do not
+      # ship the `bwrap` (Bubblewrap) executable it requires, which makes
+      # `brew doctor` (run by `brew test-bot --only-setup`) fail. Disable the
+      # Linux sandbox to work around it. No-op on macOS runners.
+      HOMEBREW_NO_SANDBOX_LINUX: 1
     steps:
       - name: Set up Homebrew
         id: set-up-homebrew
