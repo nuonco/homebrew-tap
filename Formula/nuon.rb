@@ -3,6 +3,14 @@ class Nuon < Formula
   homepage "https://www.nuon.co/"
   version "0.19.1001"
 
+  bottle do
+    root_url "https://github.com/nuonco/homebrew-tap/releases/download/bottles-0.19.1001"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "5458a259f253cc659bf45aecaec1657af0784b450df516dc3b09aaee0a3c2d1d"
+    sha256 cellar: :any_skip_relocation, big_sur:       "95201139a39f89c15a11422e4da694441887021b7e6d6ae4de872b777a89be7e"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d44f7fcd057241c671b350257494e2f742f9e63bae3f5e7afb631a5101645d6d"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "9ad30904d0e018894015255137ba7ca9c46e1ae08188796624cb492e924457b5"
+  end
+
   # CLI binary
   if OS.mac? && Hardware::CPU.intel?
     url "https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/0.19.1001/nuon_darwin_amd64"
