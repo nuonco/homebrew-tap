@@ -16,6 +16,11 @@ jobs:
       # `brew doctor` (run by `brew test-bot --only-setup`) fail. Disable the
       # Linux sandbox to work around it. No-op on macOS runners.
       HOMEBREW_NO_SANDBOX_LINUX: 1
+      # Homebrew 6's build sandbox cannot read ~/.homebrew/trust.json, so
+      # source builds from third-party taps fail even when trusted
+      # (https://github.com/Homebrew/brew/issues/22699). Remove once the
+      # upstream fix (Homebrew/brew#22700) ships.
+      HOMEBREW_NO_REQUIRE_TAP_TRUST: 1
     steps:
       - name: Set up Homebrew
         id: set-up-homebrew
