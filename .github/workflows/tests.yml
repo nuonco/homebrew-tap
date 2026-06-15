@@ -44,3 +44,59 @@ jobs:
         with:
           name: bottles-${{ matrix.os }}
           path: "*.bottle.*"
+
+  # On every `auto-merge` PR (opened by the generate workflow) report the
+  # `brew test-bot` outcome: emit a Datadog counter tagged with the status so
+  # we can track the formula auto-merge success rate, and alert #promotions on
+  # failure (GitHub native auto-merge never fires when test-bot fails, so the
+  # PR would otherwise sit open unmerged with no signal). Mirrors how
+  # nuonco/mono and nuonco/nuon instrument promotions.
+  report-auto-merge:
+    name: Report auto-merge result to #promotions + datadog
+    needs: test-bot
+    if: >-
+      always() &&
+      github.event_name == 'pull_request' &&
+      contains(github.event.pull_request.labels.*.name, 'auto-merge')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Determine status and version
+        id: check
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          echo "status=${{ needs.test-bot.result }}" >> "$GITHUB_OUTPUT"
+          # generate.yml names the branch `nuonbot/generate-<version>`
+          echo "version=${HEAD_REF#nuonbot/generate-}" >> "$GITHUB_OUTPUT"
+
+      - name: Slack Notification
+        if: steps.check.outputs.status == 'failure'
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_ICON_EMOJI: 🤖
+          SLACK_USERNAME: github-bot
+          SLACK_WEBHOOK: ${{ secrets.PROMOTIONS_SLACK_WEBHOOK_URL }}
+          SLACK_COLOR: failure
+          SLACK_TITLE: homebrew-tap auto-merge failed
+          SLACK_MESSAGE: |
+            🚨🚨 auto-merge PR failed `brew test-bot` and will not merge
+            *repo* - ${{ github.repository }}
+            *pr* - <${{ github.event.pull_request.html_url }}|#${{ github.event.pull_request.number }}: ${{ github.event.pull_request.title }}>
+            *branch* - `${{ github.head_ref }}`
+
+      - name: Update datadog
+        uses: masci/datadog@v2
+        with:
+          api-key: ${{ secrets.DATADOG_API_KEY }}
+          api-url: "https://us5.datadoghq.com"
+          metrics: |
+            - type: "count"
+              name: "promotions.count"
+              value: 1.0
+              host: ${{ github.repository_owner }}
+              tags:
+                - "branch:${{ github.head_ref }}"
+                - "status:${{ steps.check.outputs.status }}"
+                - "version:${{ steps.check.outputs.version }}"
+                - "type:homebrew-tap"
+                - "repo:${{ github.event.repository.name }}"
