@@ -5,6 +5,12 @@ version=$1
 cli_artifact_url="https://nuon-artifacts.s3.us-west-2.amazonaws.com/cli/$version"
 lsp_artifact_url="https://nuon-artifacts.s3.us-west-2.amazonaws.com/lsp/$version"
 
+# Bottle checksums produced by scripts/bottle.sh (optional). When present,
+# the formula gets a bottle block so `brew install` pours a prebuilt tarball
+# instead of running the sandboxed build phase.
+bottle_shas_file=${BOTTLE_SHAS_FILE:-bottles/shas.env}
+bottle_root_url=${BOTTLE_ROOT_URL:-https://github.com/nuonco/homebrew-tap/releases/download/bottles-$version}
+
 # Fetch CLI checksums
 cli_checksum_file=$(curl -s "$cli_artifact_url/checksums.txt")
 nuon_darwin_amd64_checksum=$(echo "$cli_checksum_file" | grep "nuon_darwin_amd64$" | cut -b -64)
@@ -40,6 +46,28 @@ class Nuon < Formula
   desc "${desc_text}"
   homepage "https://www.nuon.co/"
   version "${version}"
+EOL
+
+# Add bottle block if bottle checksums are available
+if [ -f "$bottle_shas_file" ]; then
+  # shellcheck disable=SC1090
+  source "$bottle_shas_file"
+  cat >>./Formula/nuon.rb <<EOL
+
+  bottle do
+    root_url "${bottle_root_url}"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "${BOTTLE_SHA_arm64_big_sur}"
+    sha256 cellar: :any_skip_relocation, big_sur:       "${BOTTLE_SHA_big_sur}"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "${BOTTLE_SHA_x86_64_linux}"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "${BOTTLE_SHA_arm64_linux}"
+  end
+EOL
+  echo "✅ Bottle block added to formula"
+else
+  echo "⚠️  No bottle checksums found at $bottle_shas_file, generating formula without bottles"
+fi
+
+cat >>./Formula/nuon.rb <<EOL
 
   # CLI binary
   if OS.mac? && Hardware::CPU.intel?
