@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./scripts/generate.sh 0.19.1050)",
+      "Bash(./scripts/generate.sh 0.19.970)",
+      "Bash(git checkout:*)"
+    ]
+  }
+}

@@ -165,3 +165,7 @@ cat >>./Formula/nuon.rb <<EOL
   end
 end
 EOL
+
+# Generate versioned formula (e.g. Formula/nuon@0.19.1050.rb)
+version_no_dots=$(echo "$version" | tr -d '.')
+sed "s/class Nuon </class NuonAT${version_no_dots} </" ./Formula/nuon.rb > "./Formula/nuon@${version}.rb"
