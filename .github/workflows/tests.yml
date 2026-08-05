@@ -35,7 +35,15 @@ jobs:
 
         # - run: brew test-bot --only-tap-syntax
 
-      - run: brew test-bot --only-formulae
+      # Our formulae install prebuilt Go binaries, so a bottle never needs
+      # relocating. Without `--skip-relocation`, `brew bottle` rewrites each
+      # binary's ELF interpreter via the vendored patchelf.rb gem, which as of
+      # 1.6.2 crashes on Go binaries whose single PT_NOTE segment spans both
+      # `.note.gnu.build-id` and `.note.go.buildid`:
+      #   Error: unsupported overlap of SHT_NOTE and PT_NOTE
+      # Skipping relocation bypasses patchelf entirely. Drop the flag once
+      # Homebrew ships a fixed patchelf.rb.
+      - run: brew test-bot --only-formulae --skip-relocation
         if: github.event_name == 'pull_request'
 
       - name: Upload bottles as artifact
