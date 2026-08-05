@@ -35,23 +35,60 @@ jobs:
 
         # - run: brew test-bot --only-tap-syntax
 
-      # Our formulae install prebuilt Go binaries, so a bottle never needs
-      # relocating. Without `--skip-relocation`, `brew bottle` rewrites each
-      # binary's ELF interpreter via the vendored patchelf.rb gem, which as of
-      # 1.6.2 crashes on Go binaries whose single PT_NOTE segment spans both
-      # `.note.gnu.build-id` and `.note.go.buildid`:
+      # We deliberately do not use `brew test-bot --only-formulae` here.
+      #
+      # test-bot couples "test a formula" to "build a bottle", and Homebrew's
+      # patchelf.rb 1.5.2 -> 1.6.2 bump (brew 9eccee92e, 2026-08-05) made
+      # relocating our binaries crash. patchelf 1.6.2 raises on Go binaries
+      # whose single PT_NOTE segment spans both `.note.gnu.build-id` and
+      # `.note.go.buildid`, which is every binary we ship:
       #   Error: unsupported overlap of SHT_NOTE and PT_NOTE
-      # Skipping relocation bypasses patchelf entirely. Drop the flag once
-      # Homebrew ships a fixed patchelf.rb.
-      - run: brew test-bot --only-formulae --skip-relocation
+      #
+      # Neither test-bot flag helps: `--skip-relocation` only covers
+      # `brew bottle`, and test-bot then pours the bottle it just built and
+      # relocates again via `FormulaInstaller#pour`. `--build-from-source`
+      # makes `build_bottle?` false, which hits an unconditional
+      # `skipped ...; return` before install/style/audit -- CI goes green
+      # having tested nothing.
+      #
+      # The tap declares no bottles and publishes no bottle assets, so we lose
+      # nothing by skipping them and running the checks we actually want.
+      # Uninstalling between formulae also avoids the `nuon` /
+      # `nuon@<version>` symlink conflict test-bot used to warn about.
+      - name: Test changed formulae
         if: github.event_name == 'pull_request'
+        run: |
+          # No `mapfile`/`readarray` or other bash 4 builtins, and no `set -u`
+          # (it trips on empty arrays): the macOS runners still ship bash 3.2.
+          set -eo pipefail
 
-      - name: Upload bottles as artifact
-        if: always() && github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v4
-        with:
-          name: bottles-${{ matrix.os }}
-          path: "*.bottle.*"
+          tap_dir="$(brew --repository nuonco/tap)"
+          git -C "$tap_dir" fetch -q origin main
+
+          formulae=()
+          while IFS= read -r formula; do
+            [ -n "$formula" ] && formulae+=("$formula")
+          done < <(
+            git -C "$tap_dir" diff --name-only --diff-filter=AM \
+              origin/main...HEAD -- 'Formula/*.rb' \
+              | sed -e 's|^Formula/||' -e 's|\.rb$||' -e 's|^|nuonco/tap/|'
+          )
+
+          if [ ${#formulae[@]} -eq 0 ]; then
+            echo "No formula changes in this PR; nothing to test."
+            exit 0
+          fi
+
+          printf 'Testing formula: %s\n' "${formulae[@]}"
+
+          brew style --formula "${formulae[@]}"
+          brew audit --formula --online --skip-style "${formulae[@]}"
+
+          for formula in "${formulae[@]}"; do
+            brew install --formula --verbose "$formula"
+            brew test --verbose "$formula"
+            brew uninstall --formula --force --ignore-dependencies "$formula"
+          done
 
   # On every `auto-merge` PR (opened by the generate workflow) report the
   # `brew test-bot` outcome: emit a Datadog counter tagged with the status so
