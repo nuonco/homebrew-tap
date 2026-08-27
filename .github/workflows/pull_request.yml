@@ -3,7 +3,105 @@ name: pull request checks
 "on":
   pull_request:
     types: [opened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  check-pr:
-    uses: nuonco/.github/.github/workflows/pull_request.yml@main
-    secrets: inherit
+  checks:
+    # Keep this name in sync with the required status check on main.
+    name: check-pr / Run PR checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check pull request title
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          pattern='^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([^)]+\))?!?: .+'
+          if [[ ! "$PR_TITLE" =~ $pattern ]]; then
+            echo "Pull request title must use Conventional Commits syntax."
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+        with:
+          fetch-depth: 0
+
+      - name: Reject large files
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          failed=false
+          while IFS= read -r -d '' file; do
+            if [[ -f "$file" ]] && (( $(stat --format=%s "$file") > 5 * 1024 * 1024 )); then
+              echo "File exceeds the 5 MB limit: $file"
+              failed=true
+            fi
+          done < <(git diff --name-only --diff-filter=AM -z "$BASE_SHA...$HEAD_SHA")
+          [[ "$failed" == false ]]
+
+  update-status:
+    # Keep this name in sync with the required status check on main.
+    name: check-pr / Update PR status
+    needs: checks
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report check result
+        env:
+          CHECK_RESULT: ${{ needs.checks.result }}
+        run: echo "PR checks finished with status $CHECK_RESULT"
+
+  auto-approve:
+    name: Auto-Approve if Nuonbot
+    if: github.actor == 'nuonbot'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Approve
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: gh pr review --approve "$PR_URL"
+
+  auto-merge:
+    name: Auto-Merge if labelled
+    if: contains(github.event.pull_request.labels.*.name, 'auto-merge')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enable auto-merge
+        env:
+          GH_TOKEN: ${{ secrets.NUON_BOT_GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: gh pr merge --auto --delete-branch --squash "$PR_URL"
+
+  report-failure:
+    name: Report PR check failure to #promotions
+    needs: [checks, auto-approve, auto-merge]
+    if: >-
+      always() &&
+      contains(github.event.pull_request.labels.*.name, 'auto-merge') &&
+      (needs.checks.result == 'failure' ||
+       needs['auto-approve'].result == 'failure' ||
+       needs['auto-merge'].result == 'failure')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@33ca3be66c6f378fe1610fd1d5258632dbed5e58 # v2.4.0
+        env:
+          SLACK_ICON_EMOJI: 🤖
+          SLACK_USERNAME: github-bot
+          SLACK_WEBHOOK: ${{ secrets.PROMOTIONS_SLACK_WEBHOOK_URL }}
+          SLACK_COLOR: failure
+          SLACK_TITLE: homebrew-tap PR checks failed
+          SLACK_MESSAGE: |
+            🚨🚨 auto-merge PR checks failed and the formula will not merge
+            *repo* - ${{ github.repository }}
+            *pr* - <${{ github.event.pull_request.html_url }}|#${{ github.event.pull_request.number }}: ${{ github.event.pull_request.title }}>
+            *checks* - `${{ needs.checks.result }}` *approve* - `${{ needs['auto-approve'].result }}` *merge* - `${{ needs['auto-merge'].result }}`
