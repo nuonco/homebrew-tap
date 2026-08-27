@@ -29,7 +29,7 @@ jobs:
           fi
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
         with:
           fetch-depth: 0
 
@@ -80,3 +80,28 @@ jobs:
           GH_TOKEN: ${{ secrets.NUON_BOT_GITHUB_TOKEN }}
           PR_URL: ${{ github.event.pull_request.html_url }}
         run: gh pr merge --auto --delete-branch --squash "$PR_URL"
+
+  report-failure:
+    name: Report PR check failure to #promotions
+    needs: [checks, auto-approve, auto-merge]
+    if: >-
+      always() &&
+      contains(github.event.pull_request.labels.*.name, 'auto-merge') &&
+      (needs.checks.result == 'failure' ||
+       needs['auto-approve'].result == 'failure' ||
+       needs['auto-merge'].result == 'failure')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@33ca3be66c6f378fe1610fd1d5258632dbed5e58 # v2.4.0
+        env:
+          SLACK_ICON_EMOJI: 🤖
+          SLACK_USERNAME: github-bot
+          SLACK_WEBHOOK: ${{ secrets.PROMOTIONS_SLACK_WEBHOOK_URL }}
+          SLACK_COLOR: failure
+          SLACK_TITLE: homebrew-tap PR checks failed
+          SLACK_MESSAGE: |
+            🚨🚨 auto-merge PR checks failed and the formula will not merge
+            *repo* - ${{ github.repository }}
+            *pr* - <${{ github.event.pull_request.html_url }}|#${{ github.event.pull_request.number }}: ${{ github.event.pull_request.title }}>
+            *checks* - `${{ needs.checks.result }}` *approve* - `${{ needs['auto-approve'].result }}` *merge* - `${{ needs['auto-merge'].result }}`
