@@ -1,4 +1,4 @@
-class Nuon < Formula
+class NuonAT0191227 < Formula
   desc "CLI client for Nuon with Language Server Protocol support"
   homepage "https://www.nuon.co/"
   version "0.19.1227"
